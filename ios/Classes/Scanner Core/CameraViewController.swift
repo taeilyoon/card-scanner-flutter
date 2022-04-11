@@ -15,7 +15,16 @@ protocol CameraDelegate {
     func camera(_ camera: CameraViewController, didScan scanResult: Text)
     func cameraDidStopScanning(_ camera: CameraViewController)
 }
-
+class ScanView: UIView {
+     override func draw(_ rect: CGRect) {
+        let context = UIGraphicsGetCurrentContext()
+        context?.setLineWidth(2.0)
+        context?.setStrokeColor(UIColor.green.cgColor)
+        context?.move(to: CGPoint(x: 30, y: 30))
+        context?.addLine(to: CGPoint(x: Double(xBall), y: Double(yBall)))
+        context?.strokePath()
+   }
+}
 
 class CameraViewController: UIViewController {
     var scansDroppedSinceLastReset: Int = 0
@@ -194,6 +203,31 @@ class CameraViewController: UIViewController {
         }
     }
     
+
+    func addUI(){
+        DispatchQueue.main.async {
+            let center = self.view.center
+            let scanYourCardToProceedLabel = UILabel(
+                frame: CGRect(
+                    origin: CGPoint(
+                        x: center.x - 160,
+                        y: center.y + 180
+                    ),
+                    size: CGSize(
+                        width: 320,
+                        height: 20
+                    )
+                )
+            )
+            
+            scanYourCardToProceedLabel.textAlignment = NSTextAlignment.center
+            scanYourCardToProceedLabel.text = self.prompt
+            scanYourCardToProceedLabel.numberOfLines = 0
+            scanYourCardToProceedLabel.font = scanYourCardToProceedLabel.font.withSize(12.0)
+            scanYourCardToProceedLabel.textColor = .white
+            self.view.addSubview(scanYourCardToProceedLabel)
+        }
+    }
     
     func addNavigationBar() {
         DispatchQueue.main.async {
