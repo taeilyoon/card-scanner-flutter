@@ -89,13 +89,14 @@ class CameraViewController: UIViewController {
             let backgroundView: UIView = {
                  let v = UIView()
                  v.translatesAutoresizingMaskIntoConstraints = false
-                 v.backgroundColor = UIColor.black.withAlphaComponent(0.75)
+                 v.backgroundColor = UIColor.white.withAlphaComponent(0.75)
                  return v
             }();
-            self.view.addSubview(backgroundView);
             self.view.addSubview(descriptionLabel);
             self.view.addSubview(titleLabel);
             
+            
+            self.view.addSubview(backgroundView);
             self.view.addSubview(tapCapturingView)
         }
     }

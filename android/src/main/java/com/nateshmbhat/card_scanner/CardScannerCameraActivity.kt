@@ -44,6 +44,7 @@ class CardScannerCameraActivity : AppCompatActivity() {
   lateinit var scannerLayout: View
   lateinit var scannerBar: View
   lateinit var backButton: View
+  lateinit var button: Button
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
@@ -55,7 +56,7 @@ class CardScannerCameraActivity : AppCompatActivity() {
     backButton = findViewById(R.id.backButton)
     supportActionBar?.hide();
 
-    var button = findViewById(R.id.button);
+    button = findViewById(R.id.button);
 
     button.setOnClickListener {
       finish()
