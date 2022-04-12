@@ -132,9 +132,7 @@ class CameraViewController: UIViewController {
         addInputDeviceToSession()
         
         createAndAddPreviewLayer()
-        
         addOutputToInputDevice()
-        
         addScanControlsAndIndicators()
         
         startScanning()

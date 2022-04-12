@@ -1,5 +1,6 @@
 package com.nateshmbhat.card_scanner
 
+import android.graphics.Color
 import android.Manifest
 import android.animation.ObjectAnimator
 import android.animation.ValueAnimator
@@ -54,11 +55,13 @@ class CardScannerCameraActivity : AppCompatActivity() {
     backButton = findViewById(R.id.backButton)
     supportActionBar?.hide();
 
-    val button = findViewById(R.id.button);
-    button.setBackgroundColor(Color.PINK);
+    var button = findViewById(R.id.button);
+
     button.setOnClickListener {
       finish()
     }
+
+    button.backgroundColor = Color.parseColor("#99cc00");
 
     val vto = scannerLayout.viewTreeObserver;
     backButton.setOnClickListener {
