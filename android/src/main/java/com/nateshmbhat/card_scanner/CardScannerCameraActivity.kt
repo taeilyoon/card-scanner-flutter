@@ -27,6 +27,7 @@ import com.nateshmbhat.card_scanner.scanner_core.models.CardDetails
 import com.nateshmbhat.card_scanner.scanner_core.models.CardScannerOptions
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
+import android.widget.Button
 
 
 typealias onCardScanned = (cardDetails: CardDetails?) -> Unit
