@@ -47,12 +47,18 @@ class CardScannerCameraActivity : AppCompatActivity() {
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.card_scanner_camera_activity)
-    cardScannerOptions = intent.getParcelableExtra<CardScannerOptions>(CARD_SCAN_OPTIONS)
+    cardScannerOptions = intent.getParcelableExtra<CardScannerOptions>(CARD_SCAN_OPTIONS)!!
 
     scannerLayout = findViewById(R.id.scannerLayout);
     scannerBar = findViewById(R.id.scannerBar);
     backButton = findViewById(R.id.backButton)
     supportActionBar?.hide();
+
+    val button = findViewById(R.id.button);
+    button.setBackgroundColor(Color.PINK);
+    button.setOnClickListener {
+      finish()
+    }
 
     val vto = scannerLayout.viewTreeObserver;
     backButton.setOnClickListener {
@@ -72,6 +78,7 @@ class CardScannerCameraActivity : AppCompatActivity() {
         animator.start()
       }
     })
+
 
     cameraExecutor = Executors.newSingleThreadExecutor()
 

@@ -12,7 +12,7 @@ import androidx.annotation.RequiresApi
 /**
  * TODO: document your custom view class.
  */
-class ScanView : View {
+ class ScanView : View {
 
 
     private lateinit var textPaint: TextPaint
@@ -88,12 +88,12 @@ class ScanView : View {
         canvas.save();
 
         canvas.drawRoundRect(
-        RectF(
-            paddingLeft.toFloat(),
-            (height/2 - contentHeight/2).toFloat(),
-            (paddingLeft + contentWidth).toFloat(),
-            (height/2 + contentHeight/2).toFloat()
-        ), holeBorderRadius, holeBorderRadius,  Paint().apply {
+            RectF(
+                paddingLeft.toFloat(),
+                (height/2 - contentHeight/2).toFloat(),
+                (paddingLeft + contentWidth).toFloat(),
+                (height/2 + contentHeight/2).toFloat()
+            ), holeBorderRadius, holeBorderRadius,  Paint().apply {
                 isAntiAlias = true
                 xfermode = PorterDuffXfermode(PorterDuff.Mode.CLEAR)
             }

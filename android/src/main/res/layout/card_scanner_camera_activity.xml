@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -7,12 +9,15 @@
         android:id="@+id/cameraView"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
+
     <com.nateshmbhat.card_scanner.ScanView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:paddingLeft="20dp"
-        android:paddingBottom="40dp"
-        />
+        android:paddingBottom="40dp">
+
+
+    </com.nateshmbhat.card_scanner.ScanView>
 
     <TextView
         android:id="@+id/textView"
@@ -21,13 +26,11 @@
         android:layout_marginTop="124dp"
         android:text="카드를 영역에 맞춰주세요."
         android:textColor="@color/white"
-        android:textFontWeight="700"
-
         android:textSize="18dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"/>
 
     <TextView
         android:id="@+id/textView2"
@@ -37,7 +40,6 @@
         android:lineSpacingExtra="0sp"
         android:text="본인 명의의 신용/체크카드만 등록가능 합니다"
         android:textColor="@color/white"
-        android:textFontWeight="500"
         android:textSize="16dp"
         android:translationY="-0.23sp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -49,8 +51,7 @@
         android:id="@+id/button"
         android:layout_width="0dp"
         android:layout_height="58dp"
-        android:text="Button"
-        app:iconPadding="0dp"
+        android:text="직접 입력하기"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
@@ -138,4 +139,4 @@
 
     </LinearLayout>
 
-</RelativeLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

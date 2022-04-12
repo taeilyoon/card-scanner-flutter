@@ -27,6 +27,9 @@ class ScanView: UIView {
 }
 
 class CameraViewController: UIViewController {
+
+
+
     var scansDroppedSinceLastReset: Int = 0
     
     let textRecognizer = TextRecognizer.textRecognizer()
@@ -43,6 +46,8 @@ class CameraViewController: UIViewController {
     public override func viewDidLoad() {
         super.viewDidLoad()
         gainCameraPermission()
+
+
     }
     
     public override func viewWillAppear(_ animated: Bool) {
@@ -63,6 +68,20 @@ class CameraViewController: UIViewController {
                 action: #selector(self.captureTap(_:)),
                 for: .touchDown
             )
+
+let screenSize: CGRect = UIScreen.main.bounds
+          let label = UILabel()
+          label.text = "본인 명의의 신용/체크카드 등록가능 합니다"
+        label.textColor = UIColor.white;
+        label.translatesAutoresizingMaskIntoConstraints = false;
+        label.textAlignment = .center
+        label.font = UIFont(name: "Roboto-Medium",size: 16)
+        label.widthAnchor.constraint(equalToConstant: screenSize.width).isActive = true
+        label.heightAnchor.constraint(equalToConstant: 150).isActive = true
+
+          return label
+            self.view.addSubview(backgroundView)
+            self.view.addSubview(descriptionLabel);
             
             self.view.addSubview(tapCapturingView)
         }

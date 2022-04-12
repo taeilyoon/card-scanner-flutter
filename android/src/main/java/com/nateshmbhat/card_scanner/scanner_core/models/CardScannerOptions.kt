@@ -24,13 +24,13 @@ data class CardScannerOptions(
           parcel.readByte() != 0.toByte(),
           initialScansToDrop = parcel.readInt(),
           validCardsToScanBeforeFinishingScan = parcel.readInt(),
-          cardHolderNameBlackListedWords = parcel.createStringArrayList(),
+          cardHolderNameBlackListedWords = parcel.createStringArrayList() ?: listOf(),
           considerPastDatesInExpiryDateScan = parcel.readByte() != 0.toByte(),
           maxCardHolderNameLength = parcel.readInt(),
           enableLuhnCheck = parcel.readByte() != 0.toByte(),
           cardScannerTimeOut = parcel.readInt(),
           enableDebugLogs = parcel.readByte() != 0.toByte(),
-          possibleCardHolderNamePositions = parcel.createStringArrayList()
+          possibleCardHolderNamePositions = parcel.createStringArrayList()?: listOf()
   )
 
   constructor(configMap: Map<String, String>) : this(
