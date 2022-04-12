@@ -63,12 +63,13 @@ class CardScannerCameraActivity : AppCompatActivity() {
       finish()
     }
 
-    button.backgroundColor = Color.parseColor("#99cc00");
+    button.setBackgroundColor(Color.parseColor("#99cc00").toInt());
 
     val vto = scannerLayout.viewTreeObserver;
     backButton.setOnClickListener {
       finish()
     }
+
     vto.addOnGlobalLayoutListener(object : OnGlobalLayoutListener {
       override fun onGlobalLayout() {
         scannerLayout.viewTreeObserver.removeOnGlobalLayoutListener(this)
