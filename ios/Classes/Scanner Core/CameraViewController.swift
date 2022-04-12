@@ -15,16 +15,6 @@ protocol CameraDelegate {
     func camera(_ camera: CameraViewController, didScan scanResult: Text)
     func cameraDidStopScanning(_ camera: CameraViewController)
 }
-class ScanView: UIView {
-     override func draw(_ rect: CGRect) {
-        let context = UIGraphicsGetCurrentContext()
-        context?.setLineWidth(2.0)
-        context?.setStrokeColor(UIColor.green.cgColor)
-        context?.move(to: CGPoint(x: 30, y: 30))
-        context?.addLine(to: CGPoint(x: Double(xBall), y: Double(yBall)))
-        context?.strokePath()
-   }
-}
 
 class CameraViewController: UIViewController {
 
@@ -69,19 +59,42 @@ class CameraViewController: UIViewController {
                 for: .touchDown
             )
 
-let screenSize: CGRect = UIScreen.main.bounds
-          let label = UILabel()
-          label.text = "본인 명의의 신용/체크카드 등록가능 합니다"
-        label.textColor = UIColor.white;
-        label.translatesAutoresizingMaskIntoConstraints = false;
-        label.textAlignment = .center
-        label.font = UIFont(name: "Roboto-Medium",size: 16)
-        label.widthAnchor.constraint(equalToConstant: screenSize.width).isActive = true
-        label.heightAnchor.constraint(equalToConstant: 150).isActive = true
+            let titleLabel: UILabel = {
+                  let label = UILabel()
+                
+                let screenSize: CGRect = UIScreen.main.bounds
+                  label.text = "카드를 영역에 맞춰주세요."
+                label.textColor = UIColor.white;
+                label.translatesAutoresizingMaskIntoConstraints = false;
+                label.font = UIFont(name: "Roboto-Bold", size: 18)
+                label.textAlignment = .center
+                label.widthAnchor.constraint(equalToConstant: screenSize.width).isActive = true
+                label.heightAnchor.constraint(equalToConstant: 100).isActive = true
+                  return label
+              }()
+            let descriptionLabel: UILabel = {
+                
+                let screenSize: CGRect = UIScreen.main.bounds
+                  let label = UILabel()
+                  label.text = "본인 명의의 신용/체크카드 등록가능 합니다"
+                label.textColor = UIColor.white;
+                label.translatesAutoresizingMaskIntoConstraints = false;
+                label.textAlignment = .center
+                label.font = UIFont(name: "Roboto-Medium",size: 16)
+                label.widthAnchor.constraint(equalToConstant: screenSize.width).isActive = true
+                label.heightAnchor.constraint(equalToConstant: 150).isActive = true
 
-          return label
-            self.view.addSubview(backgroundView)
+                  return label
+              }()
+            let backgroundView: UIView = {
+                 let v = UIView()
+                 v.translatesAutoresizingMaskIntoConstraints = false
+                 v.backgroundColor = UIColor.black.withAlphaComponent(0.75)
+                 return v
+            }();
+            self.view.addSubview(backgroundView);
             self.view.addSubview(descriptionLabel);
+            self.view.addSubview(titleLabel);
             
             self.view.addSubview(tapCapturingView)
         }
