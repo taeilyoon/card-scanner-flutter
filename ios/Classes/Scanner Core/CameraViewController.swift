@@ -43,7 +43,7 @@ let backgroundView: UIView = {
                                  v.heightAnchor.constraint(equalToConstant: screenSize.height).isActive = true
                                    return v
                               }();
-                                
+
     public override func viewDidLoad() {
         super.viewDidLoad()
         gainCameraPermission()
