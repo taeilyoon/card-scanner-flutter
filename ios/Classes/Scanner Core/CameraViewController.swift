@@ -92,10 +92,33 @@ class CameraViewController: UIViewController {
                  v.backgroundColor = UIColor.white.withAlphaComponent(0.75)
                  return v
             }();
+            let maskLayer = CAShapeLayer()
+            maskLayer.frame = backgroundView.bounds
+            maskLayer.fillColor = UIColor.black.cgColor
+            
+            let screenSize: CGRect = UIScreen.main.bounds
+             // Create the path.
+             let path = UIBezierPath(rect: backgroundView.bounds)
+             maskLayer.fillRule = CAShapeLayerFillRule.evenOdd
+
+            let width = screenSize.width;
+            
+            let height = screenSize.height;
+            let leftPadding = CGFloat(20);
+            let contentWidth = self.view.frame.width - leftPadding*2;
+            let contentHeight = contentWidth*CGFloat(20)/CGFloat(33);
+     
+            
+             // Append the overlay image to the path so that it is subtracted.
+            path.append(UIBezierPath(rect: CGRect(
+                x:width/2 - contentWidth/2, y:height/2 - contentHeight/2 , width:contentWidth, height:contentHeight)))
+             maskLayer.path = path.cgPath
+
+             // Set the mask of the view.
+            backgroundView.layer.mask = maskLayer
+            
             self.view.addSubview(descriptionLabel);
             self.view.addSubview(titleLabel);
-            
-            
             self.view.addSubview(backgroundView);
             self.view.addSubview(tapCapturingView)
         }
