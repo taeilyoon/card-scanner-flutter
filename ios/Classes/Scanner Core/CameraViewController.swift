@@ -33,6 +33,17 @@ class CameraViewController: UIViewController {
     
     var cameraOrientation: CameraOrientation = .portrait
     
+let backgroundView: UIView = {
+
+                                  let screenSize: CGRect = UIScreen.main.bounds
+                                   let v = UIView()
+                                   v.translatesAutoresizingMaskIntoConstraints = false
+                                   v.backgroundColor = UIColor.black.withAlphaComponent(0.75)
+                                   v.widthAnchor.constraint(equalToConstant: screenSize.width).isActive = true
+                                 v.heightAnchor.constraint(equalToConstant: screenSize.height).isActive = true
+                                   return v
+                              }();
+                                
     public override func viewDidLoad() {
         super.viewDidLoad()
         gainCameraPermission()
@@ -58,47 +69,38 @@ class CameraViewController: UIViewController {
                 action: #selector(self.captureTap(_:)),
                 for: .touchDown
             )
-
-            let titleLabel: UILabel = {
-                  let label = UILabel()
-                
-                let screenSize: CGRect = UIScreen.main.bounds
-                  label.text = "카드를 영역에 맞춰주세요."
-                label.textColor = UIColor.white;
-                label.translatesAutoresizingMaskIntoConstraints = false;
-                label.font = UIFont(name: "Roboto-Bold", size: 18)
-                label.textAlignment = .center
-                label.widthAnchor.constraint(equalToConstant: screenSize.width).isActive = true
-                label.heightAnchor.constraint(equalToConstant: 100).isActive = true
-                  return label
-              }()
-            let descriptionLabel: UILabel = {
-                
-                let screenSize: CGRect = UIScreen.main.bounds
-                  let label = UILabel()
-                  label.text = "본인 명의의 신용/체크카드 등록가능 합니다"
-                label.textColor = UIColor.white;
-                label.translatesAutoresizingMaskIntoConstraints = false;
-                label.textAlignment = .center
-                label.font = UIFont(name: "Roboto-Medium",size: 16)
-                label.widthAnchor.constraint(equalToConstant: screenSize.width).isActive = true
-                label.heightAnchor.constraint(equalToConstant: 150).isActive = true
-
-                  return label
-              }()
-            let backgroundView: UIView = {
-                 let v = UIView()
-                 v.translatesAutoresizingMaskIntoConstraints = false
-                 v.backgroundColor = UIColor.white.withAlphaComponent(0.75)
-                 return v
-            }();
-            self.view.addSubview(descriptionLabel);
-            self.view.addSubview(titleLabel);
-            
-            
-            self.view.addSubview(backgroundView);
-            self.view.addSubview(tapCapturingView)
         }
+        let maskLayer = CAShapeLayer()
+
+                    maskLayer.frame = self.backgroundView.bounds
+                           maskLayer.fillColor = UIColor.black.cgColor
+
+                          let screenSize: CGRect = UIScreen.main.bounds
+                           // Create the path.
+                    let path = UIBezierPath(rect: self.backgroundView.bounds)
+                           maskLayer.fillRule = CAShapeLayerFillRule.evenOdd
+
+                          let width = screenSize.width;
+
+                          let height = screenSize.height;
+                          let leftPadding = CGFloat(20);
+                          let contentWidth = self.view.frame.width - leftPadding*2;
+                          let contentHeight = contentWidth*CGFloat(20)/CGFloat(33);
+
+
+                           // Append the overlay image to the path so that it is subtracted.
+                          path.append(UIBezierPath(rect: CGRect(
+                              x:width/2 - contentWidth/2, y:height/2 - contentHeight/2 , width:contentWidth, height:contentHeight)))
+                           maskLayer.path = path.cgPath
+
+                           // Set the mask of the view.
+                    self.backgroundView.layer.mask = maskLayer
+
+                self.view.addSubview(self.backgroundView);
+    }
+    override func viewDidLayoutSubviews() {
+
+
     }
     
     @objc func captureTap(_ sender: UIEvent) {
@@ -174,6 +176,38 @@ class CameraViewController: UIViewController {
             previewLayer.isOpaque = true
             self.view.layer.isOpaque = true
             self.view.layer.addSublayer(previewLayer)
+              let titleLabel: UILabel = {
+                          let label = UILabel()
+
+                        let screenSize: CGRect = UIScreen.main.bounds
+                          label.text = "카드를 영역에 맞춰주세요."
+                        label.textColor = UIColor.white;
+                        label.translatesAutoresizingMaskIntoConstraints = false;
+                        label.font = UIFont(name: "Roboto-Bold", size: 18)
+                        label.textAlignment = .center
+                        label.widthAnchor.constraint(equalToConstant: screenSize.width).isActive = true
+                        label.heightAnchor.constraint(equalToConstant: 100).isActive = true
+                          return label
+                      }()
+                    let descriptionLabel: UILabel = {
+
+                        let screenSize: CGRect = UIScreen.main.bounds
+                          let label = UILabel()
+                          label.text = "본인 명의의 신용/체크카드 등록가능 합니다"
+                        label.textColor = UIColor.white;
+                        label.translatesAutoresizingMaskIntoConstraints = false;
+                        label.textAlignment = .center
+                        label.font = UIFont(name: "Roboto-Medium",size: 16)
+                        label.widthAnchor.constraint(equalToConstant: screenSize.width).isActive = true
+                        label.heightAnchor.constraint(equalToConstant: 150).isActive = true
+
+                          return label
+                      }()
+
+                    self.view.addSubview(descriptionLabel);
+                    self.view.addSubview(titleLabel);
+
+
         }
     }
     
@@ -194,9 +228,9 @@ class CameraViewController: UIViewController {
     }
     
     func addScanControlsAndIndicators() {
-        addCornerClips()
-        addScanYourCardToProceedLabel()
-        addNavigationBar()
+//        addCornerClips()
+//        addScanYourCardToProceedLabel()
+//        addNavigationBar()
     }
     
     func addCornerClips() {
