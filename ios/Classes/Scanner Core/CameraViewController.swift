@@ -16,10 +16,8 @@ protocol CameraDelegate {
     func cameraDidStopScanning(_ camera: CameraViewController)
 }
 
+
 class CameraViewController: UIViewController {
-
-
-
     var scansDroppedSinceLastReset: Int = 0
     
     let textRecognizer = TextRecognizer.textRecognizer()
@@ -32,14 +30,22 @@ class CameraViewController: UIViewController {
     var torchOn: Bool = false
     
     var cameraOrientation: CameraOrientation = .portrait
-
-
+    
     public override func viewDidLoad() {
         super.viewDidLoad()
         gainCameraPermission()
-
-
     }
+    let backgroundView: UIView = {
+        
+        let screenSize: CGRect = UIScreen.main.bounds
+         let v = UIView()
+         v.translatesAutoresizingMaskIntoConstraints = false
+        v.backgroundColor = UIColor.black.withAlphaComponent(0.75)
+        v.widthAnchor.constraint(equalToConstant: screenSize.width).isActive = true;
+        
+        v.heightAnchor.constraint(equalToConstant: screenSize.height).isActive = true;
+         return v
+    }();
     
     public override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -59,102 +65,13 @@ class CameraViewController: UIViewController {
                 action: #selector(self.captureTap(_:)),
                 for: .touchDown
             )
+            
+            self.view.addSubview(tapCapturingView)
         }
-
-        let label2: UILabel = {
-                  let label = UILabel()
-
-                let screenSize: CGRect = UIScreen.main.bounds
-                  label.text = "카드를 영역에 맞춰주세요."
-                label.textColor = UIColor.white;
-                label.translatesAutoresizingMaskIntoConstraints = false;
-                label.font = UIFont(name: "Roboto-Bold", size: 18)
-                label.textAlignment = .center
-                label.widthAnchor.constraint(equalToConstant: screenSize.width).isActive = true
-                label.heightAnchor.constraint(equalToConstant: 100).isActive = true
-                  return label
-              }()
-        let label1: UILabel = {
-
-                let screenSize: CGRect = UIScreen.main.bounds
-                  let label = UILabel()
-                  label.text = "본인 명의의 신용/체크카드 등록가능 합니다"
-                label.textColor = UIColor.white;
-                label.translatesAutoresizingMaskIntoConstraints = false;
-                label.textAlignment = .center
-                label.font = UIFont(name: "Roboto-Medium",size: 16)
-                label.widthAnchor.constraint(equalToConstant: screenSize.width).isActive = true
-                label.heightAnchor.constraint(equalToConstant: 150).isActive = true
-
-                  return label
-              }()
-     
-            
-        let button : UIButton = {
-            
-            let screenSize: CGRect = UIScreen.main.bounds
-            let button = UIButton()
-            
-            button.frame = CGRect(x : 0, y : screenSize.height - 60, width: screenSize.width, height: 60)
-            button.backgroundColor = UIColor(red: 0.957, green: 0.318, blue: 0.522, alpha: 1);
-
-            button.setTitle("직접 입력하기", for: .normal);
-            button.setTitleColor(.white, for: .normal);
-            button.addTarget(
-                self,
-                action: #selector(selectorBackButton),
-                for: .touchUpInside
-            )
-            return button;
-            
-        }();
         
-        
-        self.view.addSubview(self.backgroundView);
-        self.view.addSubview(button);
-        self.view.addSubview(label2);
-        
-        self.view.addSubview(label1);
-        
+   
     }
-    let backgroundView: UIView = {
-        
-        let screenSize: CGRect = UIScreen.main.bounds
-         let v = UIView()
-         v.translatesAutoresizingMaskIntoConstraints = false
-        v.backgroundColor = UIColor.black.withAlphaComponent(0.75)
-        v.widthAnchor.constraint(equalToConstant: screenSize.width).isActive = true;
-        
-        v.heightAnchor.constraint(equalToConstant: screenSize.height).isActive = true;
-         return v
-    }();
-    override func viewDidLayoutSubviews() {
     
-        let maskLayer = CAShapeLayer()
-        maskLayer.frame = backgroundView.bounds
-        maskLayer.fillColor = UIColor.black.cgColor
-
-       let screenSize: CGRect = UIScreen.main.bounds
-        // Create the path.
-        let path = UIBezierPath(rect: backgroundView.bounds)
-        maskLayer.fillRule = CAShapeLayerFillRule.evenOdd
-
-       let width = screenSize.width;
-       
-       let height = screenSize.height;
-       let leftPadding = CGFloat(20);
-       let contentWidth = self.view.frame.width - leftPadding*2;
-       let contentHeight = contentWidth*CGFloat(20)/CGFloat(33);
-
-       
-        // Append the overlay image to the path so that it is subtracted.
-        path.append(UIBezierPath(rect: CGRect(
-           x:width/2 - contentWidth/2, y:height/2 - contentHeight/2 , width:contentWidth, height:contentHeight)))
-        maskLayer.path = path.cgPath
-
-        
-        backgroundView.layer.mask = maskLayer;
-    }
     @objc func captureTap(_ sender: UIEvent) {
         refocus()
     }
@@ -170,6 +87,33 @@ class CameraViewController: UIViewController {
             stopScanning()
         }
     }
+    override func viewDidLayoutSubviews() {
+       
+           let maskLayer = CAShapeLayer()
+           maskLayer.frame = backgroundView.bounds
+           maskLayer.fillColor = UIColor.black.cgColor
+
+          let screenSize: CGRect = UIScreen.main.bounds
+           // Create the path.
+           let path = UIBezierPath(rect: backgroundView.bounds)
+           maskLayer.fillRule = CAShapeLayerFillRule.evenOdd
+
+          let width = screenSize.width;
+          
+          let height = screenSize.height;
+          let leftPadding = CGFloat(20);
+          let contentWidth = self.view.frame.width - leftPadding*2;
+          let contentHeight = contentWidth*CGFloat(20)/CGFloat(33);
+
+          
+           // Append the overlay image to the path so that it is subtracted.
+           path.append(UIBezierPath(rect: CGRect(
+              x:width/2 - contentWidth/2, y:height/2 - contentHeight/2 , width:contentWidth, height:contentHeight)))
+           maskLayer.path = path.cgPath
+
+           
+           backgroundView.layer.mask = maskLayer;
+       }
     
     func setupCaptureSession() {
         captureSession = AVCaptureSession()
@@ -185,23 +129,71 @@ class CameraViewController: UIViewController {
         refocus()
         
         addInputDeviceToSession()
-        
+//
         createAndAddPreviewLayer()
-        startScanning()
+//
+        addOutputToInputDevice()
 
-        let screenSize: CGRect = UIScreen.main.bounds
-        let v = UIView(frame: CGRect(
-            origin: CGPoint(
-                x: 0,
-                y: 0
-            ),
-            size: CGSize(
-                width: screenSize.width,
-                height:screenSize.height
-            )
-        ));
-        v.backgroundColor = UIColor.black.withAlphaComponent(0.75)
-        view.addSubview(v);
+//        addScanControlsAndIndicators()
+        
+        startScanning()
+        DispatchQueue.main.async {
+            let label2: UILabel = {
+                      let label = UILabel()
+
+                    let screenSize: CGRect = UIScreen.main.bounds
+                      label.text = "카드를 영역에 맞춰주세요."
+                    label.textColor = UIColor.white;
+                    label.translatesAutoresizingMaskIntoConstraints = false;
+                    label.font = UIFont(name: "Roboto-Bold", size: 18)
+                    label.textAlignment = .center
+                    label.widthAnchor.constraint(equalToConstant: screenSize.width).isActive = true
+                    label.heightAnchor.constraint(equalToConstant: 100).isActive = true
+                      return label
+                  }()
+            let label1: UILabel = {
+
+                    let screenSize: CGRect = UIScreen.main.bounds
+                      let label = UILabel()
+                      label.text = "본인 명의의 신용/체크카드 등록가능 합니다"
+                    label.textColor = UIColor.white;
+                    label.translatesAutoresizingMaskIntoConstraints = false;
+                    label.textAlignment = .center
+                    label.font = UIFont(name: "Roboto-Medium",size: 16)
+                    label.widthAnchor.constraint(equalToConstant: screenSize.width).isActive = true
+                    label.heightAnchor.constraint(equalToConstant: 150).isActive = true
+
+                      return label
+                  }()
+         
+                
+            let button : UIButton = {
+                
+                let screenSize: CGRect = UIScreen.main.bounds
+                let button = UIButton()
+                
+                button.frame = CGRect(x : 0, y : screenSize.height - 60, width: screenSize.width, height: 60)
+                button.backgroundColor = UIColor(red: 0.957, green: 0.318, blue: 0.522, alpha: 1);
+
+                button.setTitle("직접 입력하기", for: .normal);
+                button.setTitleColor(.white, for: .normal);
+                button.addTarget(
+                    self,
+                    action: #selector(self.selectorBackButton),
+                    for: .touchUpInside
+                )
+                return button;
+                
+            }();
+            
+            
+            self.view.addSubview(self.backgroundView);
+            self.view.addSubview(button);
+            self.view.addSubview(label2);
+            
+            self.view.addSubview(label1);
+        }
+ 
     }
     
     func gainCameraPermission() {
@@ -232,65 +224,13 @@ class CameraViewController: UIViewController {
     }
     
     func createAndAddPreviewLayer() {
-        DispatchQueue.main.async { [self] in
+        DispatchQueue.main.async {
             let previewLayer = AVCaptureVideoPreviewLayer(session: self.captureSession)
             previewLayer.frame = UIScreen.main.bounds
             previewLayer.videoGravity = .resizeAspectFill
             previewLayer.isOpaque = true
             self.view.layer.isOpaque = true
             self.view.layer.addSublayer(previewLayer)
-              let titleLabel: UILabel = {
-                          let label = UILabel()
-
-                        let screenSize: CGRect = UIScreen.main.bounds
-                          label.text = "카드를 영역에 맞춰주세요."
-                        label.textColor = UIColor.white;
-                        label.translatesAutoresizingMaskIntoConstraints = false;
-                        label.font = UIFont(name: "Roboto-Bold", size: 18)
-                        label.textAlignment = .center
-                        label.widthAnchor.constraint(equalToConstant: screenSize.width).isActive = true
-                        label.heightAnchor.constraint(equalToConstant: 500).isActive = true
-                          return label
-                      }()
-                    let descriptionLabel: UILabel = {
-
-                        let screenSize: CGRect = UIScreen.main.bounds
-                          let label = UILabel()
-                          label.text = "본인 명의의 신용/체크카드 등록가능 합니다"
-                        label.textColor = UIColor.white;
-                        label.translatesAutoresizingMaskIntoConstraints = false;
-                        label.textAlignment = .center
-                        label.font = UIFont(name: "Roboto-Medium",size: 16)
-                        label.widthAnchor.constraint(equalToConstant: screenSize.width).isActive = true
-                        label.heightAnchor.constraint(equalToConstant: 550).isActive = true
-
-                          return label
-                      }()
-
-            let button : UIButton = {
-                
-                let screenSize: CGRect = UIScreen.main.bounds
-                let button = UIButton()
-                
-                button.frame = CGRect(x : 0, y : screenSize.height - 60, width: screenSize.width, height: 60)
-                button.backgroundColor = UIColor(red: 0.957, green: 0.318, blue: 0.522, alpha: 1);
-
-                button.setTitle("직접 입력하기", for: .normal);
-                button.setTitleColor(.white, for: .normal);
-                button.addTarget(
-                    self,
-                    action: #selector(self.selectorBackButton),
-                    for: .touchUpInside
-                )
-                return button;
-                
-            }();
-            self.view.addSubview(self.backgroundView);
-            self.view.addSubview(button);
-            
-            self.view.addSubview(descriptionLabel);
-            self.view.addSubview(titleLabel);
-
         }
     }
     
@@ -311,9 +251,9 @@ class CameraViewController: UIViewController {
     }
     
     func addScanControlsAndIndicators() {
-//        addCornerClips()
-//        addScanYourCardToProceedLabel()
-//        addNavigationBar()
+        addCornerClips()
+        addScanYourCardToProceedLabel()
+        addNavigationBar()
     }
     
     func addCornerClips() {
@@ -351,31 +291,6 @@ class CameraViewController: UIViewController {
         }
     }
     
-
-    func addUI(){
-        DispatchQueue.main.async {
-            let center = self.view.center
-            let scanYourCardToProceedLabel = UILabel(
-                frame: CGRect(
-                    origin: CGPoint(
-                        x: center.x - 160,
-                        y: center.y + 180
-                    ),
-                    size: CGSize(
-                        width: 320,
-                        height: 20
-                    )
-                )
-            )
-            
-            scanYourCardToProceedLabel.textAlignment = NSTextAlignment.center
-            scanYourCardToProceedLabel.text = self.prompt
-            scanYourCardToProceedLabel.numberOfLines = 0
-            scanYourCardToProceedLabel.font = scanYourCardToProceedLabel.font.withSize(12.0)
-            scanYourCardToProceedLabel.textColor = .white
-            self.view.addSubview(scanYourCardToProceedLabel)
-        }
-    }
     
     func addNavigationBar() {
         DispatchQueue.main.async {
