@@ -51,6 +51,7 @@ class CardScannerCameraActivity : AppCompatActivity() {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.card_scanner_camera_activity)
     cardScannerOptions = intent.getParcelableExtra<CardScannerOptions>(CARD_SCAN_OPTIONS)!!
+
     scannerLayout = findViewById(R.id.scannerLayout);
     scannerBar = findViewById(R.id.scannerBar);
     backButton = findViewById(R.id.backButton)
@@ -62,8 +63,7 @@ class CardScannerCameraActivity : AppCompatActivity() {
       finish()
     }
  
-    
-    button.setBackgroundColor(Color.parseColor("#fff45185"));
+    button.setBackgroundColor(Color.parseColor("#99cc00").toInt());
 
     val vto = scannerLayout.viewTreeObserver;
     backButton.setOnClickListener {

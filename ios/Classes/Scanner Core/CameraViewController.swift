@@ -32,24 +32,13 @@ class CameraViewController: UIViewController {
     var torchOn: Bool = false
     
     var cameraOrientation: CameraOrientation = .portrait
-    
-    let backgroundView: UIView = {
 
-        let screenSize: CGRect = UIScreen.main.bounds
-        
-        let v = UIView()
-        v.translatesAutoresizingMaskIntoConstraints = false
-        v.backgroundColor = UIColor.black.withAlphaComponent(0.75)
-        
-        return v
-    }();
 
     public override func viewDidLoad() {
         super.viewDidLoad()
         gainCameraPermission()
-        
-        
-   
+
+
     }
     
     public override func viewWillAppear(_ animated: Bool) {
@@ -72,11 +61,100 @@ class CameraViewController: UIViewController {
             )
         }
 
-    }
-    override func viewDidLayoutSubviews() {
+        let label2: UILabel = {
+                  let label = UILabel()
+
+                let screenSize: CGRect = UIScreen.main.bounds
+                  label.text = "카드를 영역에 맞춰주세요."
+                label.textColor = UIColor.white;
+                label.translatesAutoresizingMaskIntoConstraints = false;
+                label.font = UIFont(name: "Roboto-Bold", size: 18)
+                label.textAlignment = .center
+                label.widthAnchor.constraint(equalToConstant: screenSize.width).isActive = true
+                label.heightAnchor.constraint(equalToConstant: 100).isActive = true
+                  return label
+              }()
+        let label1: UILabel = {
+
+                let screenSize: CGRect = UIScreen.main.bounds
+                  let label = UILabel()
+                  label.text = "본인 명의의 신용/체크카드 등록가능 합니다"
+                label.textColor = UIColor.white;
+                label.translatesAutoresizingMaskIntoConstraints = false;
+                label.textAlignment = .center
+                label.font = UIFont(name: "Roboto-Medium",size: 16)
+                label.widthAnchor.constraint(equalToConstant: screenSize.width).isActive = true
+                label.heightAnchor.constraint(equalToConstant: 150).isActive = true
+
+                  return label
+              }()
+     
+            
+        let button : UIButton = {
+            
+            let screenSize: CGRect = UIScreen.main.bounds
+            let button = UIButton()
+            
+            button.frame = CGRect(x : 0, y : screenSize.height - 40, width: screenSize.width, height: 40)
+            button.backgroundColor = .orange
+
+            button.setTitle("직접 입력하기", for: .normal);
+            button.setTitleColor(.white, for: .normal);
+            button.addTarget(
+                self,
+                action: #selector(selectorBackButton),
+                for: .touchUpInside
+            )
+            return button;
+            
+        }();
+        
+        
+        self.view.addSubview(self.backgroundView);
+        self.view.addSubview(button);
+        self.view.addSubview(label2);
+        
+        self.view.addSubview(label1);
         
     }
+    let backgroundView: UIView = {
+        
+        let screenSize: CGRect = UIScreen.main.bounds
+         let v = UIView()
+         v.translatesAutoresizingMaskIntoConstraints = false
+        v.backgroundColor = UIColor.black.withAlphaComponent(0.75)
+        v.widthAnchor.constraint(equalToConstant: screenSize.width).isActive = true;
+        
+        v.heightAnchor.constraint(equalToConstant: screenSize.height).isActive = true;
+         return v
+    }();
+    override func viewDidLayoutSubviews() {
     
+        let maskLayer = CAShapeLayer()
+        maskLayer.frame = backgroundView.bounds
+        maskLayer.fillColor = UIColor.black.cgColor
+
+       let screenSize: CGRect = UIScreen.main.bounds
+        // Create the path.
+        let path = UIBezierPath(rect: backgroundView.bounds)
+        maskLayer.fillRule = CAShapeLayerFillRule.evenOdd
+
+       let width = screenSize.width;
+       
+       let height = screenSize.height;
+       let leftPadding = CGFloat(20);
+       let contentWidth = self.view.frame.width - leftPadding*2;
+       let contentHeight = contentWidth*CGFloat(20)/CGFloat(33);
+
+       
+        // Append the overlay image to the path so that it is subtracted.
+        path.append(UIBezierPath(rect: CGRect(
+           x:width/2 - contentWidth/2, y:height/2 - contentHeight/2 , width:contentWidth, height:contentHeight)))
+        maskLayer.path = path.cgPath
+
+        
+        backgroundView.layer.mask = maskLayer;
+    }
     @objc func captureTap(_ sender: UIEvent) {
         refocus()
     }
@@ -113,7 +191,7 @@ class CameraViewController: UIViewController {
         addScanControlsAndIndicators()
 
         startScanning()
-        
+
         let screenSize: CGRect = UIScreen.main.bounds
         let v = UIView(frame: CGRect(
             origin: CGPoint(
@@ -154,9 +232,6 @@ class CameraViewController: UIViewController {
     
     func addInputDeviceToSession() {
         captureSession.addInput(input)
-        
-        
-        
     }
     
     func createAndAddPreviewLayer() {
@@ -197,9 +272,9 @@ class CameraViewController: UIViewController {
 
                     self.view.addSubview(descriptionLabel);
                     self.view.addSubview(titleLabel);
-            
-            
-            
+
+
+
 
 //                    self.backgroundView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor).isActive = true
 //                    self.backgroundView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor).isActive = true
@@ -228,9 +303,9 @@ class CameraViewController: UIViewController {
     }
     
     func addScanControlsAndIndicators() {
-//        addCornerClips()
-//        addScanYourCardToProceedLabel()
-//        addNavigationBar()
+        addCornerClips()
+        addScanYourCardToProceedLabel()
+        addNavigationBar()
     }
     
     func addCornerClips() {
@@ -335,7 +410,6 @@ class CameraViewController: UIViewController {
         return flashBtn
     }()
     
-    
     lazy var backButton: UIButton = {
         let backBtn = UIButton(
             frame: CGRect(
@@ -344,6 +418,13 @@ class CameraViewController: UIViewController {
                 width: 17 + 30,
                 height: 17 + 10
             )
+        )
+        
+        backBtn.setImage(
+            UIImage(
+                named: "backButton"
+            ),
+            for: .normal
         )
         
         backBtn.addTarget(
