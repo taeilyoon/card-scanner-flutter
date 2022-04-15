@@ -96,7 +96,7 @@ class CameraViewController: UIViewController {
             let button = UIButton()
             
             button.frame = CGRect(x : 0, y : screenSize.height - 40, width: screenSize.width, height: 40)
-            button.backgroundColor = .orange
+            button.backgroundColor = UIColor(red: 0.957, green: 0.318, blue: 0.522, alpha: 1);
 
             button.setTitle("직접 입력하기", for: .normal);
             button.setTitleColor(.white, for: .normal);
