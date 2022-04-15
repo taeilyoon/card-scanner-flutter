@@ -95,7 +95,7 @@ class CameraViewController: UIViewController {
             let screenSize: CGRect = UIScreen.main.bounds
             let button = UIButton()
             
-            button.frame = CGRect(x : 0, y : screenSize.height - 40, width: screenSize.width, height: 40)
+            button.frame = CGRect(x : 0, y : screenSize.height - 60, width: screenSize.width, height: 60)
             button.backgroundColor = UIColor(red: 0.957, green: 0.318, blue: 0.522, alpha: 1);
 
             button.setTitle("직접 입력하기", for: .normal);
@@ -187,9 +187,6 @@ class CameraViewController: UIViewController {
         addInputDeviceToSession()
         
         createAndAddPreviewLayer()
-        addOutputToInputDevice()
-        addScanControlsAndIndicators()
-
         startScanning()
 
         let screenSize: CGRect = UIScreen.main.bounds
@@ -235,7 +232,7 @@ class CameraViewController: UIViewController {
     }
     
     func createAndAddPreviewLayer() {
-        DispatchQueue.main.async {
+        DispatchQueue.main.async { [self] in
             let previewLayer = AVCaptureVideoPreviewLayer(session: self.captureSession)
             previewLayer.frame = UIScreen.main.bounds
             previewLayer.videoGravity = .resizeAspectFill
@@ -270,18 +267,29 @@ class CameraViewController: UIViewController {
                           return label
                       }()
 
-                    self.view.addSubview(descriptionLabel);
-                    self.view.addSubview(titleLabel);
+            let button : UIButton = {
+                
+                let screenSize: CGRect = UIScreen.main.bounds
+                let button = UIButton()
+                
+                button.frame = CGRect(x : 0, y : screenSize.height - 60, width: screenSize.width, height: 60)
+                button.backgroundColor = UIColor(red: 0.957, green: 0.318, blue: 0.522, alpha: 1);
 
-
-
-
-//                    self.backgroundView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor).isActive = true
-//                    self.backgroundView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor).isActive = true
-//                    self.backgroundView.topAnchor.constraint(equalTo: self.view.topAnchor).isActive = true
-//                    self.backgroundView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor).isActive = true
-//
-//
+                button.setTitle("직접 입력하기", for: .normal);
+                button.setTitleColor(.white, for: .normal);
+                button.addTarget(
+                    self,
+                    action: #selector(self.selectorBackButton),
+                    for: .touchUpInside
+                )
+                return button;
+                
+            }();
+            self.view.addSubview(self.backgroundView);
+            self.view.addSubview(button);
+            
+            self.view.addSubview(descriptionLabel);
+            self.view.addSubview(titleLabel);
 
         }
     }
@@ -303,9 +311,9 @@ class CameraViewController: UIViewController {
     }
     
     func addScanControlsAndIndicators() {
-        addCornerClips()
-        addScanYourCardToProceedLabel()
-        addNavigationBar()
+//        addCornerClips()
+//        addScanYourCardToProceedLabel()
+//        addNavigationBar()
     }
     
     func addCornerClips() {
