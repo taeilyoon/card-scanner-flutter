@@ -33,22 +33,23 @@ class CameraViewController: UIViewController {
     
     var cameraOrientation: CameraOrientation = .portrait
     
-let backgroundView: UIView = {
+    let backgroundView: UIView = {
 
-                                  let screenSize: CGRect = UIScreen.main.bounds
-                                   let v = UIView()
-                                   v.translatesAutoresizingMaskIntoConstraints = false
-                                   v.backgroundColor = UIColor.black.withAlphaComponent(0.75)
-                                   v.widthAnchor.constraint(equalToConstant: screenSize.width).isActive = true
-                                 v.heightAnchor.constraint(equalToConstant: screenSize.height).isActive = true
-                                   return v
-                              }();
+        let screenSize: CGRect = UIScreen.main.bounds
+        
+        let v = UIView()
+        v.translatesAutoresizingMaskIntoConstraints = false
+        v.backgroundColor = UIColor.black.withAlphaComponent(0.75)
+        
+        return v
+    }();
 
     public override func viewDidLoad() {
         super.viewDidLoad()
         gainCameraPermission()
-
-
+        
+        
+   
     }
     
     public override func viewWillAppear(_ animated: Bool) {
@@ -70,37 +71,10 @@ let backgroundView: UIView = {
                 for: .touchDown
             )
         }
-        let maskLayer = CAShapeLayer()
 
-                    maskLayer.frame = self.backgroundView.bounds
-                           maskLayer.fillColor = UIColor.black.cgColor
-
-                          let screenSize: CGRect = UIScreen.main.bounds
-                           // Create the path.
-                    let path = UIBezierPath(rect: self.backgroundView.bounds)
-                           maskLayer.fillRule = CAShapeLayerFillRule.evenOdd
-
-                          let width = screenSize.width;
-
-                          let height = screenSize.height;
-                          let leftPadding = CGFloat(20);
-                          let contentWidth = self.view.frame.width - leftPadding*2;
-                          let contentHeight = contentWidth*CGFloat(20)/CGFloat(33);
-
-
-                           // Append the overlay image to the path so that it is subtracted.
-                          path.append(UIBezierPath(rect: CGRect(
-                              x:width/2 - contentWidth/2, y:height/2 - contentHeight/2 , width:contentWidth, height:contentHeight)))
-                           maskLayer.path = path.cgPath
-
-                           // Set the mask of the view.
-                    self.backgroundView.layer.mask = maskLayer
-
-                self.view.addSubview(self.backgroundView);
     }
     override func viewDidLayoutSubviews() {
-
-
+        
     }
     
     @objc func captureTap(_ sender: UIEvent) {
@@ -137,8 +111,22 @@ let backgroundView: UIView = {
         createAndAddPreviewLayer()
         addOutputToInputDevice()
         addScanControlsAndIndicators()
-        
+
         startScanning()
+        
+        let screenSize: CGRect = UIScreen.main.bounds
+        let v = UIView(frame: CGRect(
+            origin: CGPoint(
+                x: 0,
+                y: 0
+            ),
+            size: CGSize(
+                width: screenSize.width,
+                height:screenSize.height
+            )
+        ));
+        v.backgroundColor = UIColor.black.withAlphaComponent(0.75)
+        view.addSubview(v);
     }
     
     func gainCameraPermission() {
@@ -166,6 +154,9 @@ let backgroundView: UIView = {
     
     func addInputDeviceToSession() {
         captureSession.addInput(input)
+        
+        
+        
     }
     
     func createAndAddPreviewLayer() {
@@ -186,7 +177,7 @@ let backgroundView: UIView = {
                         label.font = UIFont(name: "Roboto-Bold", size: 18)
                         label.textAlignment = .center
                         label.widthAnchor.constraint(equalToConstant: screenSize.width).isActive = true
-                        label.heightAnchor.constraint(equalToConstant: 100).isActive = true
+                        label.heightAnchor.constraint(equalToConstant: 500).isActive = true
                           return label
                       }()
                     let descriptionLabel: UILabel = {
@@ -199,14 +190,23 @@ let backgroundView: UIView = {
                         label.textAlignment = .center
                         label.font = UIFont(name: "Roboto-Medium",size: 16)
                         label.widthAnchor.constraint(equalToConstant: screenSize.width).isActive = true
-                        label.heightAnchor.constraint(equalToConstant: 150).isActive = true
+                        label.heightAnchor.constraint(equalToConstant: 550).isActive = true
 
                           return label
                       }()
 
                     self.view.addSubview(descriptionLabel);
                     self.view.addSubview(titleLabel);
+            
+            
+            
 
+//                    self.backgroundView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor).isActive = true
+//                    self.backgroundView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor).isActive = true
+//                    self.backgroundView.topAnchor.constraint(equalTo: self.view.topAnchor).isActive = true
+//                    self.backgroundView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor).isActive = true
+//
+//
 
         }
     }
@@ -335,6 +335,7 @@ let backgroundView: UIView = {
         return flashBtn
     }()
     
+    
     lazy var backButton: UIButton = {
         let backBtn = UIButton(
             frame: CGRect(
@@ -343,13 +344,6 @@ let backgroundView: UIView = {
                 width: 17 + 30,
                 height: 17 + 10
             )
-        )
-        
-        backBtn.setImage(
-            UIImage(
-                named: "backButton"
-            ),
-            for: .normal
         )
         
         backBtn.addTarget(
